@@ -7,7 +7,6 @@ export default function Home() {
   const [recipientEmails, setRecipientEmails] = useState<string[]>([]);
   const [newRecipient, setNewRecipient] = useState("");
   const [subject, setSubject] = useState("");
-  const emailData = new Map();
   const [sendingInProgress, setSendingInProgress] = useState<boolean>(false);
 
   const addRecipient = () => {
@@ -24,10 +23,10 @@ export default function Home() {
   };
 
   const sendEmails = async () => {
-    console.log("button clicked!!!");
+    // console.log("button clicked!!!");
     setSendingInProgress(true);
     for (let i = 0; i < recipientEmails.length; i++) {
-      console.log("Loop started...");
+      // console.log("Loop started...");
       const formData = {
         recipientEmail: recipientEmails[i],
         subject,
@@ -42,17 +41,14 @@ export default function Home() {
 
         if (response.status === 200) {
           console.log(`Email sent to ${recipientEmails[i]} successfully!`);
-          emailData.set(recipientEmails[i], "successfully sent");
         }
       } catch (error) {
         console.error("Error sending emails", error);
-        emailData.set(recipientEmails[i], "failed");
       }
 
       // Wait for 10 seconds before sending the next email
       await new Promise((resolve) => setTimeout(resolve, 10000));
-      console.log("Loop Ended...");
-      console.log(emailData, typeof emailData);
+      // console.log("Loop Ended...");
 
       // if it is the last email in the list, set sendingInProgress to false
       if (i === recipientEmails.length - 1) {
