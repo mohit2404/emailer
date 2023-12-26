@@ -68,9 +68,8 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen">
-      <div className="container mx-auto h-full flex">
-        <div className="w-1/3 h-full"></div>
-        <div className="w-1/3 h-full grid place-items-center">
+      <div className="container mx-auto h-full flex flex-col md:flex-row items-center px-4">
+        <div className="md:w-1/2 lg:w-2/3 w-full h-full grid place-items-center">
           <form onSubmit={handleSubmit} className="p-4 rounded-md border-2">
             <h1>Send Multiple Emails</h1>
             <div className="mt-4 flex items-center gap-4">
@@ -91,7 +90,7 @@ export default function Home() {
                 placeholder="Subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                // required
+                required
                 className="w-full h-12 border-2 outline-none rounded px-4 text-black"
               />
             </div>
@@ -104,8 +103,12 @@ export default function Home() {
             </button>
           </form>
         </div>
-        <div className="w-1/3 h-full p-4 bg-gray-100">
+        <div className="md:w-1/2 lg:w-1/3 w-full h-full p-4 bg-gray-100">
           <div className="py-4">
+            <div>
+              <p>Subject of the Mail:</p>
+              <p>{subject}</p>
+            </div>
             {recipientEmails.map((email, index) => (
               <div
                 key={index}
