@@ -9,13 +9,13 @@ export async function POST(req: Request) {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.NEXT_PUBLIC_NODEMAILER_EMAIL,
-        pass: process.env.NEXT_PUBLIC_NODEMAILER_PW,
+        user: process.env.NODEMAILER_EMAIL,
+        pass: process.env.NODEMAILER_PW,
       },
     });
 
     const info = await transporter.sendMail({
-      from: process.env.NEXT_PUBLIC_NODEMAILER_EMAIL,
+      from: process.env.NODEMAILER_EMAIL,
       to: recipientEmail,
       subject: subject,
       text: "this is a simple text",
