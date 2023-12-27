@@ -106,7 +106,7 @@ export default function Home() {
             </button>
           </form>
         </div>
-        <div className="md:w-1/2 lg:w-1/3 w-full h-full p-4 bg-gray-100">
+        <div className="md:w-1/2 lg:w-1/3 w-full h-full p-4 bg-gray-100 overflow-y-scroll container-snap">
           <div className="py-4">
             <div>
               <p>Subject of the Mail:</p>
