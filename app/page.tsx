@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [recipientEmails, setRecipientEmails] = useState<string[]>([]);
@@ -40,7 +42,11 @@ export default function Home() {
         console.log(response);
 
         if (response.status === 200) {
+          toast.success(response.data.recipientEmail);
           console.log(`Email sent to ${recipientEmails[i]} successfully!`);
+          setRecipientEmails((prevEmails) =>
+            prevEmails.filter((email) => email !== recipientEmails[i])
+          );
         }
       } catch (error) {
         console.error("Error sending emails", error);
@@ -65,6 +71,7 @@ export default function Home() {
   return (
     <div className="w-full h-screen">
       <div className="container mx-auto h-full flex flex-col md:flex-row items-center px-4">
+        <ToastContainer />
         <div className="md:w-1/2 lg:w-2/3 w-full h-full grid place-items-center">
           <form onSubmit={handleSubmit} className="p-4 rounded-md border-2">
             <h1>Send Multiple Emails</h1>
