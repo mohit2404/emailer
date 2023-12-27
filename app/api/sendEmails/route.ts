@@ -30,7 +30,6 @@ export async function POST(req: Request) {
     style="
       font-family: Arial, sans-serif;
       background-color: #fff;
-      padding: 20px;
     "
   >
     <table
@@ -38,7 +37,6 @@ export async function POST(req: Request) {
         max-width: 600px;
         margin: 0 auto;
         background-color: #fff;
-        padding: 20px;
         border-radius: 8px;
       "
     >
@@ -47,9 +45,9 @@ export async function POST(req: Request) {
           <table
             style="
               max-width: 600px;
+              width: "100%";
               margin: 0 auto;
               background-color: #fff;
-              padding: 20px;
               border-radius: 8px;
             "
           >
