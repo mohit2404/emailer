@@ -5,9 +5,9 @@ export async function POST(req: Request) {
   const { recipientEmail, subject } = await req.json();
   try {
     let transporter = nodemailer.createTransport({
-      host: "gmail",
-      // port: 465,
-      // secure: true,
+      host: "smtpout.secureserver.net",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PW,
@@ -16,6 +16,7 @@ export async function POST(req: Request) {
 
     const info = await transporter.sendMail({
       from: process.env.NODEMAILER_EMAIL,
+      bcc: process.env.NODEMAILER_EMAIL,
       to: recipientEmail,
       subject: subject,
       text: "this is a simple text",

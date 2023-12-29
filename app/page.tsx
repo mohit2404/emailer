@@ -32,6 +32,7 @@ export default function Home() {
       const formData = {
         recipientEmail: recipientEmails[i],
         subject,
+        text: "Lorem ipsum dolor sit amet consectetur adipisicing elit@. Animi deleniti tempora reiciendis, eaque rerum asperiores ab@. Autem beatae voluptates deleniti ipsum quidem consequatur ipsa, enim dolores, repudiandae quae@, voluptatum voluptatem."
       };
       try {
         const response = await axios.post("/api/sendEmails", formData, {
