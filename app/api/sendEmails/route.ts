@@ -3,7 +3,6 @@ import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   const { smtpData, recipientEmail, mailData } = await req.json();
-  console.log(smtpData, recipientEmail, mailData);
   try {
     const paragraph = mailData.text.split(".");
     const trimmedParagraph = paragraph.filter(
