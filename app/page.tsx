@@ -119,7 +119,7 @@ export default function Home() {
   return (
     <div className="w-full h-screen">
       <ToastContainer />
-      <div className="container mx-auto h-full flex px-4">
+      <div className="container mx-auto h-full flex flex-col lg:flex-row">
         {/* first div with smtp details */}
         <div className={`${smtpModel && "w-full"} p-4`}>
           <div className="w-full text-right py-4">
