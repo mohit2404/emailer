@@ -4,12 +4,59 @@ import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { XMarkIcon } from "@heroicons/react/16/solid";
+
+type SmtpData = {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  pass: string;
+};
+
+type MailData = {
+  subject: string;
+  heading: string;
+  imageLink: string;
+  text: string;
+  signature: string;
+};
 
 export default function Home() {
   const [recipientEmails, setRecipientEmails] = useState<string[]>([]);
-  const [newRecipient, setNewRecipient] = useState("");
-  const [subject, setSubject] = useState("");
+  const [newRecipient, setNewRecipient] = useState<string>("");
+
   const [sendingInProgress, setSendingInProgress] = useState<boolean>(false);
+  const [mailData, setMailData] = useState<MailData>({
+    subject: "",
+    heading: "",
+    imageLink: "",
+    text: "",
+    signature: "",
+  });
+  const handleMailDataChange = (e: any) => {
+    const { name, value } = e.target;
+    setMailData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const [smtpModel, setSmtpModel] = useState<boolean>(false);
+  const [smtpData, setSmtpData] = useState<SmtpData>({
+    host: "",
+    port: 465,
+    secure: true,
+    user: "",
+    pass: "",
+  });
+  const handleSmtpDataChange = (e: any) => {
+    const { name, value } = e.target;
+    setSmtpData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const addRecipient = () => {
     if (newRecipient.trim() !== "") {
@@ -30,9 +77,9 @@ export default function Home() {
     for (let i = 0; i < recipientEmails.length; i++) {
       // console.log("Loop started...");
       const formData = {
+        smtpData: smtpData,
         recipientEmail: recipientEmails[i],
-        subject,
-        text: "Lorem ipsum dolor sit amet consectetur adipisicing elit@. Animi deleniti tempora reiciendis, eaque rerum asperiores ab@. Autem beatae voluptates deleniti ipsum quidem consequatur ipsa, enim dolores, repudiandae quae@, voluptatum voluptatem."
+        mailData: mailData,
       };
       try {
         const response = await axios.post("/api/sendEmails", formData, {
@@ -40,7 +87,7 @@ export default function Home() {
             "Content-Type": "application/json",
           },
         });
-        console.log(response);
+        console.log(response.data);
 
         if (response.status === 200) {
           toast.success(response.data.recipientEmail);
@@ -71,20 +118,101 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen">
-      <div className="container mx-auto h-full flex flex-col md:flex-row items-center px-4">
-        <ToastContainer />
-        <div className="md:w-1/2 lg:w-2/3 w-full h-full grid place-items-center">
-          <form onSubmit={handleSubmit} className="p-4 rounded-md border-2">
-            <h1>Send Multiple Emails</h1>
-            <div className="mt-4 flex items-center gap-4">
+      <ToastContainer />
+      <div className="container mx-auto h-full flex px-4">
+        {/* first div with smtp details */}
+        <div className={`${smtpModel && "w-full"} p-4`}>
+          <div className="w-full text-right py-4">
+            <button
+              onClick={() => setSmtpModel((prev: any) => !prev)}
+              className="bg-green-300 text-green-800 p-2.5 px-4 rounded-full border-0 outline-none whitespace-nowrap"
+            >
+              Configure Smtp
+            </button>
+          </div>
+          {smtpModel && (
+            <div className="rounded-lg p-4 relative">
+              <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">Configure Smtp</h1>
+                <XMarkIcon
+                  onClick={() => setSmtpModel(false)}
+                  className="w-7 h-7 cursor-pointer"
+                />
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <div className="relative tracking-wide">
+                  <label className="text-sm" htmlFor="host">
+                    Host
+                  </label>
+                  <input
+                    type="text"
+                    name="host"
+                    value={smtpData.host}
+                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    onChange={handleSmtpDataChange}
+                  />
+                </div>
+                <div className="relative tracking-wide">
+                  <label className="text-sm" htmlFor="port">
+                    Port
+                  </label>
+                  <input
+                    type="number"
+                    name="port"
+                    value={smtpData.port}
+                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    onChange={handleSmtpDataChange}
+                  />
+                </div>
+                <div className="relative tracking-wide">
+                  <label className="text-sm" htmlFor="user">
+                    User Email
+                  </label>
+                  <input
+                    type="text"
+                    name="user"
+                    value={smtpData.user}
+                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    onChange={handleSmtpDataChange}
+                  />
+                </div>
+                <div className="relative tracking-wide">
+                  <label className="text-sm" htmlFor="password">
+                    User Password
+                  </label>
+                  <input
+                    type="text"
+                    name="pass"
+                    value={smtpData.pass}
+                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    onChange={handleSmtpDataChange}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* second div with submit handler */}
+        <div className="w-full p-4 mt-4">
+          <h1 className="text-2xl text-center font-medium">
+            Send Multiple Emails
+          </h1>
+          <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto">
+            <div className="relative mt-4 flex items-center gap-4">
               <input
                 type="text"
                 placeholder="Recipient Email"
                 value={newRecipient}
                 onChange={(e) => setNewRecipient(e.target.value)}
-                className="w-full h-12 border-2 outline-none rounded px-4 text-black"
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
-              <button type="button" onClick={addRecipient}>
+              <button
+                type="button"
+                onClick={addRecipient}
+                className="absolute right-1 inset-y-1 px-7 bg-green-300 text-green-800 font-medium rounded-full"
+              >
                 Add
               </button>
             </div>
@@ -92,53 +220,87 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Subject"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                name="subject"
+                value={mailData.subject}
+                onChange={handleMailDataChange}
                 required
-                className="w-full h-12 border-2 outline-none rounded px-4 text-black"
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
-            <button
-              type="submit"
-              disabled={sendingInProgress}
-              className="w-full h-12 border-0 outline-none bg-green-300 text-green-800 rounded mt-4"
-            >
-              {sendingInProgress ? "Sending..." : "Send Emails"}
-            </button>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Mail Heading"
+                name="heading"
+                value={mailData.heading}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Image Link"
+                name="imageLink"
+                value={mailData.imageLink}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Paragraph Text"
+                name="text"
+                value={mailData.text}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Signature"
+                name="signature"
+                value={mailData.signature}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            {recipientEmails.length > 0 && (
+              <button
+                type="submit"
+                disabled={sendingInProgress}
+                className="w-full h-12 border-0 outline-none bg-green-300 text-green-800 rounded-full mt-4"
+              >
+                {sendingInProgress ? "Sending..." : "Send Emails"}
+              </button>
+            )}
           </form>
         </div>
-        <div className="md:w-1/2 lg:w-1/3 w-full h-full p-4 bg-gray-100 overflow-y-scroll container-snap">
+        <div className="bg-gray-100 w-full p-4 overflow-y-scroll container-snap">
           <div className="py-4">
             <div>
-              <p>Subject of the Mail:</p>
-              <p>{subject}</p>
+              <p>Mail Subject:</p>
+              <p>{mailData.subject}</p>
             </div>
-            {recipientEmails.map((email, index) => (
+            {recipientEmails.map((email: string, index: number) => (
               <div
                 key={index}
                 className="relative flex items-center justify-between my-4 border-2 rounded-md p-2"
               >
-                <span>{email}</span>
+                <p>{email}</p>
                 {!sendingInProgress && (
                   <button
                     type="button"
                     onClick={() => removeRecipient(index)}
                     className="bg-rose-300 text-rose-800 p-0.5 top-0 right-0 absolute rounded"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
+                    <XMarkIcon className="w-6 h-6" />
                   </button>
                 )}
               </div>
