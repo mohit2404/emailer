@@ -73,7 +73,7 @@ export async function POST(req: Request) {
 
     const info = await transporter.sendMail({
       from: process.env.NODEMAILER_EMAIL,
-      // bcc: process.env.NODEMAILER_EMAIL,
+      bcc: process.env.NODEMAILER_EMAIL,
       to: recipientEmail,
       subject: mailData.subject,
       text: mailData.heading,
