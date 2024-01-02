@@ -132,60 +132,52 @@ export default function Home() {
           </div>
           {smtpModel && (
             <div className="rounded-lg p-4 relative">
-              <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">Configure Smtp</h1>
-                <XMarkIcon
-                  onClick={() => setSmtpModel(false)}
-                  className="w-7 h-7 cursor-pointer"
-                />
-              </div>
-
               <div className="flex flex-col gap-4">
                 <div className="relative tracking-wide">
-                  <label className="text-sm" htmlFor="host">
+                  <label className="text-sm ml-4" htmlFor="host">
                     Host
                   </label>
                   <input
                     type="text"
                     name="host"
                     value={smtpData.host}
-                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    className="w-full h-12 rounded-full border-2 outline-none px-4"
                     onChange={handleSmtpDataChange}
                   />
                 </div>
                 <div className="relative tracking-wide">
-                  <label className="text-sm" htmlFor="port">
+                  <label className="text-sm ml-4" htmlFor="port">
                     Port
                   </label>
                   <input
                     type="number"
                     name="port"
                     value={smtpData.port}
-                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    className="w-full h-12 rounded-full border-2 outline-none px-4"
                     onChange={handleSmtpDataChange}
                   />
                 </div>
                 <div className="relative tracking-wide">
-                  <label className="text-sm" htmlFor="user">
+                  <label className="text-sm ml-4" htmlFor="user">
                     User Email
                   </label>
                   <input
                     type="text"
                     name="user"
                     value={smtpData.user}
-                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    className="w-full h-12 rounded-full border-2 outline-none px-4"
                     onChange={handleSmtpDataChange}
                   />
                 </div>
                 <div className="relative tracking-wide">
-                  <label className="text-sm" htmlFor="password">
+                  <label className="text-sm ml-4" htmlFor="password">
                     User Password
                   </label>
                   <input
                     type="text"
                     name="pass"
                     value={smtpData.pass}
-                    className="w-full h-12 rounded border-2 outline-none px-4"
+                    className="w-full h-12 rounded-full border-2 outline-none px-4"
                     onChange={handleSmtpDataChange}
                   />
                 </div>
