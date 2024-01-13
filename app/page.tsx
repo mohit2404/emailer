@@ -116,12 +116,28 @@ export default function Home() {
     sendEmails();
   };
 
+  const hotel_Address =
+    "9918, Street No. 5, Multani Dhanda, Paharganj, Delhi, 110055";
+
   return (
     <div className="w-full h-screen">
       <ToastContainer />
       <div className="container mx-auto h-full flex flex-col lg:flex-row">
         {/* first div with smtp details */}
+
         <div className={`${smtpModel && "w-full"} p-4`}>
+          <iframe
+            className="w-24 aspect-video rounded-md border-2 border-secondary sticky top-14"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAGvy5rBo-MPjD0vR2BkkRhtKAXmFHCLVY&q=${hotel_Address}
+								)}`}
+            allowFullScreen
+          />
+          <iframe
+            className="w-24 aspect-video rounded-md border-2 border-secondary sticky top-14"
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAGvy5rBo-MPjD0vR2BkkRhtKAXmFHCLVY&q=${hotel_Address}`}
+            allowFullScreen
+          ></iframe>
           <div className="w-full text-right">
             <button
               onClick={() => setSmtpModel((prev: any) => !prev)}
