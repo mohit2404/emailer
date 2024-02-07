@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { XMarkIcon } from "@heroicons/react/16/solid";
+import { Toaster, toast } from "sonner";
 
 type SmtpData = {
   host: string;
@@ -50,6 +49,7 @@ export default function Home() {
     user: "",
     pass: "",
   });
+
   const handleSmtpDataChange = (e: any) => {
     const { name, value } = e.target;
     setSmtpData((prevData) => ({
@@ -65,6 +65,31 @@ export default function Home() {
     }
   };
 
+  // Function to handle file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      // Callback function when file is read
+      reader.onload = (e) => {
+        if (e.target) {
+          const content = e.target.result as string;
+          // Split content by comma and remove double quotes
+          const emailArray = content
+            .split(",")
+            .map((email) => email.trim().replace(/"/g, ""))
+            .filter((email) => email !== "");
+          setRecipientEmails(emailArray);
+        }
+      };
+
+      // Read the file as text
+      reader.readAsText(file);
+    }
+  };
+
   const removeRecipient = (index: number) => {
     const updatedRecipients = [...recipientEmails];
     updatedRecipients.splice(index, 1);
@@ -72,15 +97,14 @@ export default function Home() {
   };
 
   const sendEmails = async () => {
-    // console.log("button clicked!!!");
     setSendingInProgress(true);
     for (let i = 0; i < recipientEmails.length; i++) {
-      // console.log("Loop started...");
       const formData = {
         smtpData: smtpData,
         recipientEmail: recipientEmails[i],
         mailData: mailData,
       };
+
       try {
         const response = await axios.post("/api/sendEmails", formData, {
           headers: {
@@ -102,7 +126,6 @@ export default function Home() {
 
       // Wait for 10 seconds before sending the next email
       await new Promise((resolve) => setTimeout(resolve, 10000));
-      // console.log("Loop Ended...");
 
       // if it is the last email in the list, set sendingInProgress to false
       if (i === recipientEmails.length - 1) {
@@ -116,28 +139,15 @@ export default function Home() {
     sendEmails();
   };
 
-  const hotel_Address =
-    "9918, Street No. 5, Multani Dhanda, Paharganj, Delhi, 110055";
-
   return (
     <div className="w-full h-screen">
-      <ToastContainer />
+      <div className="absolute top-0 inset-x-0">
+        <Toaster richColors position="top-right" />
+      </div>
       <div className="container mx-auto h-full flex flex-col lg:flex-row">
         {/* first div with smtp details */}
 
         <div className={`${smtpModel && "w-full"} p-4`}>
-          <iframe
-            className="w-24 aspect-video rounded-md border-2 border-secondary sticky top-14"
-            referrerPolicy="no-referrer-when-downgrade"
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAGvy5rBo-MPjD0vR2BkkRhtKAXmFHCLVY&q=${hotel_Address}
-								)}`}
-            allowFullScreen
-          />
-          <iframe
-            className="w-24 aspect-video rounded-md border-2 border-secondary sticky top-14"
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAGvy5rBo-MPjD0vR2BkkRhtKAXmFHCLVY&q=${hotel_Address}`}
-            allowFullScreen
-          ></iframe>
           <div className="w-full text-right">
             <button
               onClick={() => setSmtpModel((prev: any) => !prev)}
@@ -295,6 +305,17 @@ export default function Home() {
               >
                 Add
               </button>
+            </div>
+            <div className="relative mt-4 flex flex-col">
+              <p className="px-2 py-1">
+                or add multiple emails through a txt file
+              </p>
+              <input
+                type="file"
+                accept=".txt"
+                onChange={handleFileUpload}
+                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              />
             </div>
             <div className="mt-4">
               <input
