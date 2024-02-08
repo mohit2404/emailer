@@ -335,7 +335,6 @@ export default function Home() {
                 name="heading"
                 value={mailData.heading}
                 onChange={handleMailDataChange}
-                required
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
@@ -346,7 +345,6 @@ export default function Home() {
                 name="imageLink"
                 value={mailData.imageLink}
                 onChange={handleMailDataChange}
-                required
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
@@ -357,7 +355,6 @@ export default function Home() {
                 name="text"
                 value={mailData.text}
                 onChange={handleMailDataChange}
-                required
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>

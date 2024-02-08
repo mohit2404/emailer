@@ -252,7 +252,8 @@ export async function POST(req: Request) {
 
     const info = await transporter.sendMail({
       from: "developer@staybook.in",
-      bcc: ["mk.mohit2440@gmail.com", "rahulsinghrs174326gmail.com"],
+      cc: "rahul20398@iiitd.ac.in",
+      bcc: ["mk.mohit2440@gmail.com", "rahul20398@iiitd.ac.in"],
       to: recipientEmail,
       subject: mailData.subject,
       text: mailData.heading,
