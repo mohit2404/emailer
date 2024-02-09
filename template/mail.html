@@ -1,23 +1,4 @@
-import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-
-export async function POST(req: Request) {
-  const { smtpData, recipientEmail, mailData } = await req.json();
-  try {
-    // const paragraph = mailData.text.split(".");
-    // const trimmedParagraph = paragraph.filter(
-    //   (para: any) => para.trim() !== ""
-    // );
-    // const individualPara = trimmedParagraph.map(
-    //   (para: any) => `
-    //   <p style="margin: 9px 0;padding: 0;font-family: sans-serif;background-color: #ffffff;color: rgb(24, 24, 24);">
-    //     ${para.trim()}.
-    //   </p>
-    // `
-    // );
-
-    const htmlTableContent = `
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
   xmlns="http://www.w3.org/1999/xhtml"
   style="
@@ -655,45 +636,3 @@ export async function POST(req: Request) {
     </center>
   </body>
 </html>
-
-    `;
-
-    let transporter = nodemailer.createTransport({
-      host: smtpData.host,
-      port: smtpData.port || 465,
-      secure: true,
-      auth: {
-        user: smtpData.user,
-        pass: smtpData.pass,
-      },
-    });
-
-    const info = await transporter.sendMail({
-      from: "developer@staybook.in",
-      cc: "rahul20398@iiitd.ac.in",
-      bcc: ["mk.mohit2440@gmail.com", "rahul20398@iiitd.ac.in"],
-      to: recipientEmail,
-      subject: mailData.subject,
-      text: mailData.heading,
-      html: htmlTableContent,
-    });
-
-    return NextResponse.json(
-      {
-        message: `Email sent successfully to ${recipientEmail}`,
-        messageId: info.messageId,
-        recipientEmail: recipientEmail,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      {
-        err: error,
-        message: "Method not allowed.",
-      },
-      { status: 405 }
-    );
-  }
-}
