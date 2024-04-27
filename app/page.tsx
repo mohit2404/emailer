@@ -15,9 +15,7 @@ type SmtpData = {
 
 type MailData = {
   subject: string;
-  heading: string;
-  imageLink: string;
-  text: string;
+  mailBody: string;
   signature: string;
 };
 
@@ -28,9 +26,7 @@ export default function Home() {
   const [sendingInProgress, setSendingInProgress] = useState<boolean>(false);
   const [mailData, setMailData] = useState<MailData>({
     subject: "",
-    heading: "",
-    imageLink: "",
-    text: "",
+    mailBody: "",
     signature: "",
   });
   const handleMailDataChange = (e: any) => {
@@ -106,11 +102,7 @@ export default function Home() {
       };
 
       try {
-        const response = await axios.post("/api/sendEmails", formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.post("/api/sendEmails", formData);
         console.log(response.data);
 
         if (response.status === 200) {
@@ -308,7 +300,7 @@ export default function Home() {
             </div>
             <div className="relative mt-4 flex flex-col">
               <p className="px-2 py-1">
-                or add multiple emails through a txt file
+                Add multiple emails through a plain txt file
               </p>
               <input
                 type="file"
@@ -328,7 +320,7 @@ export default function Home() {
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <input
                 type="text"
                 placeholder="Mail Heading"
@@ -337,8 +329,8 @@ export default function Home() {
                 onChange={handleMailDataChange}
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
-            </div>
-            <div className="mt-4">
+            </div> */}
+            {/* <div className="mt-4">
               <input
                 type="text"
                 placeholder="Image Link"
@@ -347,13 +339,23 @@ export default function Home() {
                 onChange={handleMailDataChange}
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
-            </div>
-            <div className="mt-4">
+            </div> */}
+            {/* <div className="mt-4">
               <input
                 type="text"
                 placeholder="Paragraph Text"
                 name="text"
                 value={mailData.text}
+                onChange={handleMailDataChange}
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div> */}
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Mail body"
+                name="mailBody"
+                value={mailData.mailBody}
                 onChange={handleMailDataChange}
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
