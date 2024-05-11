@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "Emailer",
     images: [
       {
-        url: "https://drive.google.com/file/d/1t7p6LQ0VUHjKfx5DH0LE2kIk3r3MnWPZ/view",
+        url: "https://drive.google.com/uc?id=1t7p6LQ0VUHjKfx5DH0LE2kIk3r3MnWPZ",
       },
     ],
   },
