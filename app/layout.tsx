@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "Emailer",
     images: [
       {
-        url: "https://drive.usercontent.google.com/download?id=1t7p6LQ0VUHjKfx5DH0LE2kIk3r3MnWPZ&authuser=0",
+        url: "https://images.staybook.in/Jagat-Niwas-Palace-Hotel/Jagat-Niwas-Palace-Hotel-deluxe-room-4.webp",
       },
     ],
   },
