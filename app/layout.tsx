@@ -5,17 +5,18 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://emailer-nine.vercel.app"),
   title: "Emailer App",
   description: "Send Bulk Emails",
   openGraph: {
     type: "website",
-    url: "https://example.com",
-    title: "My Website",
-    description: "My Website Description",
-    siteName: "My Website",
+    url: "https://emailer-nine.vercel.app",
+    title: "Emailer Nine",
+    description: "Send bulk emails through SMTP server",
+    siteName: "Emailer",
     images: [
       {
-        url: "https://staybook.in/_next/image?url=https%3A%2F%2Fimages.staybook.in%2FJagat-Niwas-Palace-Hotel%2FJagat-Niwas-Palace-Hotel-deluxe-room-4.webp&w=1920&q=75",
+        url: "https://drive.google.com/file/d/1t7p6LQ0VUHjKfx5DH0LE2kIk3r3MnWPZ/view",
       },
     ],
   },
