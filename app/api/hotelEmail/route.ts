@@ -405,7 +405,7 @@ export async function POST(req: Request) {
     });
 
     const info = await transporter.sendMail({
-      from: "developer@staybook.in",
+      from: "booking@staybook.in",
       bcc: "mk.mohit2440@gmail.com",
       to: recipientEmail,
       subject: mailData.subject,

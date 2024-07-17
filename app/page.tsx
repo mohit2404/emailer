@@ -14,9 +14,13 @@ type SmtpData = {
 };
 
 type MailData = {
+  email: string;
   subject: string;
   mailBody: string;
-  signature: string;
+  clientName: string;
+
+  signatureName: string;
+  signatureNumber: string;
 };
 
 export default function Home() {
@@ -25,9 +29,13 @@ export default function Home() {
 
   const [sendingInProgress, setSendingInProgress] = useState<boolean>(false);
   const [mailData, setMailData] = useState<MailData>({
+    email: "",
     subject: "",
     mailBody: "",
-    signature: "",
+    clientName: "",
+
+    signatureName: "",
+    signatureNumber: "",
   });
   const handleMailDataChange = (e: any) => {
     const { name, value } = e.target;
@@ -39,11 +47,11 @@ export default function Home() {
 
   const [smtpModel, setSmtpModel] = useState<boolean>(false);
   const [smtpData, setSmtpData] = useState<SmtpData>({
-    host: "",
+    host: "smtpout.secureserver.net",
     port: 465,
     secure: true,
-    user: "",
-    pass: "",
+    user: "booking@staybook.in",
+    pass: "KausarQadri@#02",
   });
 
   const handleSmtpDataChange = (e: any) => {
@@ -92,37 +100,63 @@ export default function Home() {
     setRecipientEmails(updatedRecipients);
   };
 
+  // const sendEmails = async () => {
+  //   setSendingInProgress(true);
+  //   for (let i = 0; i < recipientEmails.length; i++) {
+  //     const formData = {
+  //       smtpData: smtpData,
+  //       recipientEmail: recipientEmails[i],
+  //       mailData: mailData,
+  //     };
+
+  //     try {
+  //       const response = await axios.post("http://localhost:3000/api/sendEmails", formData);
+  //       console.log(response.data);
+
+  //       if (response.status === 200) {
+  //         toast.success(response.data.recipientEmail);
+  //         console.log(`Email sent to ${recipientEmails[i]} successfully!`);
+  //         setRecipientEmails((prevEmails) =>
+  //           prevEmails.filter((email) => email !== recipientEmails[i])
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error("Error sending emails", error);
+  //     }
+
+  //     // Wait for 10 seconds before sending the next email
+  //     await new Promise((resolve) => setTimeout(resolve, 10000));
+
+  //     // if it is the last email in the list, set sendingInProgress to false
+  //     if (i === recipientEmails.length - 1) {
+  //       setSendingInProgress(false);
+  //     }
+  //   }
+  // };
+
   const sendEmails = async () => {
     setSendingInProgress(true);
-    for (let i = 0; i < recipientEmails.length; i++) {
-      const formData = {
-        smtpData: smtpData,
-        recipientEmail: recipientEmails[i],
-        mailData: mailData,
-      };
+    const formData = {
+      smtpData: smtpData,
+      recipientEmail: mailData.email,
+      mailData: mailData,
+    };
 
-      try {
-        const response = await axios.post("/api/sendEmails", formData);
-        console.log(response.data);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/sendEmails",
+        formData
+      );
+      console.log(response.data);
 
-        if (response.status === 200) {
-          toast.success(response.data.recipientEmail);
-          console.log(`Email sent to ${recipientEmails[i]} successfully!`);
-          setRecipientEmails((prevEmails) =>
-            prevEmails.filter((email) => email !== recipientEmails[i])
-          );
-        }
-      } catch (error) {
-        console.error("Error sending emails", error);
+      if (response.status === 200) {
+        toast.success(response.data.recipientEmail);
+        console.log(`Email sent to ${mailData.email} successfully!`);
       }
-
-      // Wait for 10 seconds before sending the next email
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-
-      // if it is the last email in the list, set sendingInProgress to false
-      if (i === recipientEmails.length - 1) {
-        setSendingInProgress(false);
-      }
+      setSendingInProgress(false);
+    } catch (error) {
+      console.error("Error sending emails", error);
+      setSendingInProgress(false);
     }
   };
 
@@ -282,7 +316,7 @@ export default function Home() {
             Send Multiple Emails
           </h1>
           <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto">
-            <div className="relative mt-4 flex items-center gap-4">
+            {/* <div className="relative mt-4 flex items-center gap-4">
               <input
                 type="text"
                 placeholder="Recipient Email"
@@ -297,8 +331,8 @@ export default function Home() {
               >
                 Add
               </button>
-            </div>
-            <div className="relative mt-4 flex flex-col">
+            </div> */}
+            {/* <div className="relative mt-4 flex flex-col">
               <p className="px-2 py-1">
                 Add multiple emails through a plain txt file
               </p>
@@ -307,6 +341,17 @@ export default function Home() {
                 accept=".txt"
                 onChange={handleFileUpload}
                 className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              />
+            </div> */}
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Email Address"
+                name="email"
+                value={mailData.email}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
             <div className="mt-4">
@@ -363,26 +408,50 @@ export default function Home() {
             <div className="mt-4">
               <input
                 type="text"
-                placeholder="Signature"
-                name="signature"
-                value={mailData.signature}
+                placeholder="Client Name"
+                name="clientName"
+                value={mailData.clientName}
                 onChange={handleMailDataChange}
                 required
                 className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
               />
             </div>
-            {recipientEmails.length > 0 && (
-              <button
-                type="submit"
-                disabled={sendingInProgress}
-                className="w-full h-12 border-0 outline-none bg-green-300 text-green-800 rounded-full mt-4"
-              >
-                {sendingInProgress ? "Sending..." : "Send Emails"}
-              </button>
-            )}
+
+            <p className="font-medium mt-4 ml-4">user signature section</p>
+            <div className="">
+              <input
+                type="text"
+                placeholder="User Name"
+                name="signatureName"
+                value={mailData.signatureName}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="user number"
+                name="signatureNumber"
+                value={mailData.signatureNumber}
+                onChange={handleMailDataChange}
+                required
+                className="w-full h-12 border-2 outline-none rounded-full px-4 text-black"
+              />
+            </div>
+            {/* {recipientEmails.length > 0 && ( */}
+            <button
+              type="submit"
+              disabled={sendingInProgress}
+              className="w-full h-12 border-0 outline-none bg-green-300 text-green-800 rounded-full mt-4"
+            >
+              {sendingInProgress ? "Sending..." : "Send Emails"}
+            </button>
+            {/* )} */}
           </form>
         </div>
-        <div className="bg-gray-100 w-full p-4 overflow-y-scroll container-snap">
+        {/* <div className="bg-gray-100 w-full p-4 overflow-y-scroll container-snap">
           <div className="py-4">
             <div>
               <p>Mail Subject:</p>
@@ -406,7 +475,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
