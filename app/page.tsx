@@ -143,10 +143,7 @@ export default function Home() {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/sendEmails",
-        formData
-      );
+      const response = await axios.post("https://emailer-nine.vercel.app/api/sendEmails", formData);
       console.log(response.data);
 
       if (response.status === 200) {
